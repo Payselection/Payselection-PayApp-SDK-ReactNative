@@ -39,28 +39,8 @@ export const headers = () => ( {
   'content-type': 'application/json',
 } );
 
-const processServerError = async (response: Response) => {
-  const data = await response.json();
-  if (!data || typeof data !== 'object' || !data.error) {
-    return new Error(DEFAULT_ERROR_MESSAGE);
-  }
-  return new Error(data.error.message || DEFAULT_ERROR_MESSAGE);
-};
-
-interface ErrorResponse {
-  message: string;
-}
-
-const processClientError = async (response: Response): Promise<string> => {
-  const data: { errors?: ErrorResponse[] } = await response.json();
-  let errorMessage = '';
-  if (data.errors && Array.isArray(data.errors)) {
-    errorMessage = data.errors.map((err: ErrorResponse) => err.message).join('; ');
-  }
-  return errorMessage || DEFAULT_ERROR_MESSAGE;
-};
-
 export const parseResponse = async( response: Response ) => {
+  console.log('here ');
   switch (response.status) {
     case 200:
     case 201:
@@ -70,10 +50,9 @@ export const parseResponse = async( response: Response ) => {
       return {};
     case 400:
     case 403:
-    case 404:
-      throw new Error(await processClientError(response));
-    case 500:
-      throw await processServerError(response);
+    case 409:
+      const errorBody = await response.json();
+      throw new Error(`HTTP Error: ${response.status} \n ${JSON.stringify(errorBody)}`);
     default:
       throw new Error((await response.json()).message || DEFAULT_ERROR_MESSAGE);
   }

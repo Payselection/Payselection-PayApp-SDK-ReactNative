@@ -24,7 +24,7 @@ export interface TransactionStateDeclined extends TransactionResult {
   }
 }
 
-export interface TransactionStateWaitFor3ds extends TransactionResult{
+export interface TransactionStateWaitFor3ds extends TransactionResult {
   StateDetails: {
     AcsUrl: string;
     PaReq: string;
@@ -32,7 +32,7 @@ export interface TransactionStateWaitFor3ds extends TransactionResult{
   }
 }
 
-export interface TransactionStateRedirect extends TransactionResult{
+export interface TransactionStateRedirect extends TransactionResult {
   StateDetails: {
     RedirectUrl?: string;
     RedirectMethod?: string;
