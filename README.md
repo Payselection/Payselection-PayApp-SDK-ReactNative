@@ -1,79 +1,141 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Payselection-SDK-React-Native
+PaySelection PayApp SDK позволяет интегрировать прием платежей в мобильное приложение для платформы React Native.
 
-# Getting Started
+Возможности SDK:
+- Одностадийная операция оплаты;
+- Получение статуса транзакции по TransactionId;
+- Получение информации о текущем статусе по идентификатору заказа orderId.
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+## Требования
+Перед установкой необходимо убедиться, что версия Node 18 и выше.
+>**Note**: Убедитесь, что вы завершили настройку окружения [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) до шага "Creating a new application", перед тем как начать.
 
-## Step 1: Start the Metro Server
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
-
-To start Metro, run the following command from the _root_ of your React Native project:
-
+## Установка
 ```bash
 # using npm
-npm start
+npm i  payselection-pay-app-sdk-reactnative
 
 # OR using Yarn
-yarn start
+yarn i  payselection-pay-app-sdk-reactnative
 ```
 
-## Step 2: Start your Application
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+## Полезные ссылки
+[Личный кабинет](https://merchant.payselection.com/login/) \
+[Разработчикам](https://api.payselection.com/#section/Request-signature)
 
-### For Android
+## Использование paymentApi
 
-```bash
-# using npm
-npm run android
+### Создание тела запроса для метода оплаты
+В зависимости от типа оплаты создайте экземпляр структуры `TokenBasedPayment`, `QRCodePayment` или `CryptogramPayment` с информацией о транзакции и данными карты, передав туда customerInfo, если требуется. 
 
-# OR using Yarn
-yarn android
+Внимание! Необходимо валидировать передаваемые данные, иначе сервер вернет ошибку. Подробнее о форматах можно прочесть в документации [Payselection API](https://api.payselection.com/).
+
+```jsx
+import { TokenBasedPayment, QRCodePayment, CryptogramPayment } from '../types/payment/paymentPayload.ts';
+
+export const tokenBasedPayment: TokenBasedPayment = {
+  OrderId: "", // Уникальный номер заказа
+  Amount: "10",
+  Currency: "RUB",
+  Description: "test payment",
+  RebillFlag: false,
+  CustomerInfo: {
+    Email: "user@example.com",
+    Phone: "+19991231212",
+    Language: "en",
+    Address: "string",
+    Town: "string",
+    ZIP: "string",
+    Country: "USA",
+    IP: "10.0.2.56"
+  },
+  PaymentMethod: "Token",
+  PaymentDetails: {
+    Type: "Yandex",
+    PayToken: "eyJzaWduZWRNZXNzYWdlIjoie1wiZW5jcnlwdGVkTWVzc2FnZVwiOlwiMXljbzNsbkl4cTRFRUZ0eEF3TnNOaGxKbTJSdXJ0dG9tOGloYkNuMjR6WkVUOW5oeGkyV0M0WmZzdDhmMklSb3AxbXN1Y2o4TTZYTTFKNWlPdG9VRExCTGtlWHlxQzJIVWFpOGVrR29BYjFQY1RUSWZFcHM4OEZRK1BTUis2RjduTEFpU25IUUJ0d3QvSGE0SE5ORVlBdkdQQXEvSHFNMldyb1FXK2k3ZkVUbGxkU25xazE4WkFyeDc4dW9FQWVOYW9OYThGbXhnU2tNUCt6Q2Q1ZWowdWpaNUd5RjhNVWtNVjFSL3liRzJmZHR1bktMTzZRbkVZc0pkblhEN3pGTEIrZkJQUjR5UktYZTRqV3FkbnpqUUY1WkZnSHZBQTZINnhFTFlzVmZsc1pJVndFbGtNRzFBTWI0MWJDMVY5enpcIixcImVwaGVtZXJhbFB1YmxpY0tleVwiOlwiQkVQQkxlczhLWWp2WCtYem13Z3h3QithL2JYYSs0ZUdvSWF3eFRpeTlQcHRpOXcrTUtPdDRxSHFaNmNGcmFhcFY4Q3dwT29KWEVrTE1ZQVhRUjRsMDFFPVwifSIsIml2IjoiZWJ2SVg5TzBwVnRTZ21QNGFqcnd2UT09IiwidGFnIjoiNVE2cWNGRHg3L0NEaXZscHRVbDh2Umo4RFFWZUxHRGZ5UlV3UTdJa0tsMD0ifQ=="
+  }
+}
+
 ```
 
-### For iOS
+### Генерация подписи запроса (X-REQUEST-SIGNATURE)
+Перед тем как использовать `paymentApi` и `getStatusApi` необходимо сгенерировать уникальную подпись запроса. Для этого необходимо создать интерфейс типа `SignatureProps` и вызвать метод `signatureGeneration`
+для генерации подписи запроса:
 
-```bash
-# using npm
-npm run ios
+```jsx
+import { SignatureProps } from './common.ts';
+import { signatureGeneration } from './src/utils/common.ts';
 
-# OR using Yarn
-yarn ios
+const signaturePayment: SignatureProps = {
+  requestMethod: 'POST', // Request method (Метод запроса)
+  url: 'https://example.com', // URL (Адрес запроса)
+  xSiteId: '99999', // X-SITE-ID (Находится в личном кабинете мерчанта, в разделе “Сайты”, параметр ID сайта)
+  xRequestId: 'Tkrdjvb87630Uegp', // X-REQUEST-ID (Генерируется на стороне мерчанта)
+  siteSecretKey: 'jdPnu3LKGnBqShN3', // Cекретный ключ или публичный ключ
+  requestBody: tokenBasedPayment, // Request body (Тело запроса)
+}
+
+const signature = signatureGeneration(signaturePayment);
 ```
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+### Создание заголовка для вызова методы оплаты
+Создания заголовка для метода оплаты `paymentApi.publicPay`:
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+```jsx
+import { PublicPayHeader } from './src/types/payment/paymentPayload.ts';
 
-## Step 3: Modifying your App
+const payHeader: PublicPayHeader = {
+  X_SITE_ID: '99999',
+  X_REQUEST_ID: 'Tkrdjvb87630Uegp', // X_REQUEST_ID должен быть уникальным
+  X_REQUEST_SIGNATURE: signature, // Сгенерированная выше подпись запроса
+}
+```
 
-Now that you have successfully run the app, let's modify it.
+### Вызов метода оплаты `paymentApi.publicPay`
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+```jsx
+import paymentApi from './src/api/payment.ts';
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+const result = await paymentApi.publicPay(tokenBasedPayment, payHeader);
+```
 
-## Congratulations! :tada:
+## Использование getStatusApi
 
-You've successfully run and modified your React Native App. :partying_face:
+### Генерация подписи запроса (X-REQUEST-SIGNATURE)
+Используется тот же метод, что и для `paymentApi`. 
 
-### Now what?
+### Создание заголовка для вызова методы оплаты
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
+В зависимости от используемого запроса необходимо создать заголовок подходящего типа (`GetStatusByOrderIdHeader` для `getStatusApi.getStatusByOrderId`, `GetStatusByTransactionIdHeader` для `getStatusApi.getStatusByTransactionId`).
 
-# Troubleshooting
+Ниже приведен пример создания заголовка для запроса на getStatusApi.getStatusByOrderId:
+```jsx
+import { GetStatusByOrderIdHeader, GetStatusByTransactionIdHeader } from './src/types/status/statusPayload.ts';
+ 
+const getStatusByOrderIdHeader: GetStatusByTransactionIdHeader = {
+  X_SITE_ID: '99999',
+  X_REQUEST_ID: 'Tkrdjvb87630Uegp', // X_REQUEST_ID должен быть уникальным
+  X_REQUEST_SIGNATURE: signature, // Сгенерированная подпись запроса с данными для получения статуса транзакции
+}
+```
 
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+### Вызов методов получения информации о транзацкии по orderId или TransactionId
 
-# Learn More
+```jsx
+import getStatusApi from './src/api/status';
 
-To learn more about React Native, take a look at the following resources:
+// Для получения информации по `orderId`
+ const result = await getStatusApi.getStatusByOrderId(orderId, getStatusByOrderIdHeader);
+// Для получения информации по `TransactionId`
+ const result = await getStatusApi.getStatusByTransactionId(transactionId, getStatusByTransactionIdHeader);
+```
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+## Лицензия
+
+MIT
+
+## Поддержка
+
+По возникающим вопросам техничечкого характера обращайтесь на [support@payselection.com](mailto:support@payselection.com)
