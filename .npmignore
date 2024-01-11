@@ -1,3 +1,4 @@
+# Rules from: C:\GoFarSoftProjects\Payselection-PayApp-SDK-ReactNative\PayselectionPayAppSdkReactNative\.gitignore
 # OSX
 #
 .DS_Store
@@ -86,6 +87,7 @@ yarn-error.log
 # testing
 /coverage
 
-# others
-App.tsx
-src/utils/mockData.ts
+
+# npmignore - content above this line is automatically generated and modifications may be omitted
+# see npmjs.com/npmignore for more details.
+true
