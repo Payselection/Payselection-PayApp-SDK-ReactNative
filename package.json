@@ -1,5 +1,5 @@
 {
-  "name": "PayselectionPayAppSdkReactNative",
+  "name": "payselection-pay-app-sdk-reactnative",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -30,6 +30,7 @@
     "babel-jest": "^29.6.3",
     "eslint": "^8.19.0",
     "jest": "^29.6.3",
+    "npmignore": "^0.3.1",
     "prettier": "2.8.8",
     "react-test-renderer": "18.2.0",
     "typescript": "^5.0.4"
@@ -39,5 +40,29 @@
   },
   "peerDependencies": {
     "react": "^18.2.0"
-  }
+  },
+  "description": "PaySelection PayApp SDK позволяет интегрировать прием платежей в мобильное приложение для платформы React Native.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PalinaHaidzina/Payselection-PayApp-SDK-ReactNative.git"
+  },
+  "keywords": [
+    "payselection",
+    "payment",
+    "pay",
+    "sdk",
+    "react-native",
+    "react",
+    "payment-request",
+    "android",
+    "cross",
+    "platform"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/PalinaHaidzina/Payselection-PayApp-SDK-ReactNative/issues"
+  },
+  "homepage": "https://github.com/PalinaHaidzina/Payselection-PayApp-SDK-ReactNative#readme"
 }
