@@ -16,8 +16,6 @@ PaySelection PayApp SDK позволяет интегрировать прием
 # using npm
 npm i  payselection-pay-app-sdk-reactnative
 
-# OR using Yarn
-yarn i  payselection-pay-app-sdk-reactnative
 ```
 
 
@@ -33,7 +31,7 @@ yarn i  payselection-pay-app-sdk-reactnative
 Внимание! Необходимо валидировать передаваемые данные, иначе сервер вернет ошибку. Подробнее о форматах можно прочесть в документации [Payselection API](https://api.payselection.com/).
 
 ```jsx
-import { TokenBasedPayment, QRCodePayment, CryptogramPayment } from '../types/payment/paymentPayload.ts';
+import { TokenBasedPayment, QRCodePayment, CryptogramPayment } from 'payselection-pay-app-sdk-reactnative/src/types/payment/paymentPayload.ts';
 
 export const tokenBasedPayment: TokenBasedPayment = {
   OrderId: "", // Уникальный номер заказа
@@ -65,8 +63,7 @@ export const tokenBasedPayment: TokenBasedPayment = {
 для генерации подписи запроса:
 
 ```jsx
-import { SignatureProps } from './common.ts';
-import { signatureGeneration } from './src/utils/common.ts';
+import { SignatureProps, signatureGeneration } from 'payselection-pay-app-sdk-reactnative/src/utils/common.ts';
 
 const signaturePayment: SignatureProps = {
   requestMethod: 'POST', // Request method (Метод запроса)
@@ -84,7 +81,7 @@ const signature = signatureGeneration(signaturePayment);
 Создания заголовка для метода оплаты `paymentApi.publicPay`:
 
 ```jsx
-import { PublicPayHeader } from './src/types/payment/paymentPayload.ts';
+import { PublicPayHeader } from 'payselection-pay-app-sdk-reactnative/src/types/payment/paymentPayload.ts';
 
 const payHeader: PublicPayHeader = {
   X_SITE_ID: '99999',
@@ -96,7 +93,7 @@ const payHeader: PublicPayHeader = {
 ### Вызов метода оплаты `paymentApi.publicPay`
 
 ```jsx
-import paymentApi from './src/api/payment.ts';
+import paymentApi from 'payselection-pay-app-sdk-reactnative/src/api/payment.ts';
 
 const result = await paymentApi.publicPay(tokenBasedPayment, payHeader);
 ```
@@ -112,7 +109,7 @@ const result = await paymentApi.publicPay(tokenBasedPayment, payHeader);
 
 Ниже приведен пример создания заголовка для запроса на getStatusApi.getStatusByOrderId:
 ```jsx
-import { GetStatusByOrderIdHeader, GetStatusByTransactionIdHeader } from './src/types/status/statusPayload.ts';
+import { GetStatusByOrderIdHeader, GetStatusByTransactionIdHeader } from 'payselection-pay-app-sdk-reactnative/src/types/status/statusPayload.ts';
  
 const getStatusByOrderIdHeader: GetStatusByTransactionIdHeader = {
   X_SITE_ID: '99999',
@@ -124,7 +121,7 @@ const getStatusByOrderIdHeader: GetStatusByTransactionIdHeader = {
 ### Вызов методов получения информации о транзацкии по orderId или TransactionId
 
 ```jsx
-import getStatusApi from './src/api/status';
+import getStatusApi from 'payselection-pay-app-sdk-reactnative/src/api/status';
 
 // Для получения информации по `orderId`
  const result = await getStatusApi.getStatusByOrderId(orderId, getStatusByOrderIdHeader);
