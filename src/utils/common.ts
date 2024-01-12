@@ -40,7 +40,6 @@ export const headers = () => ( {
 } );
 
 export const parseResponse = async( response: Response ) => {
-  console.log('here ');
   switch (response.status) {
     case 200:
     case 201:

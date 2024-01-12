@@ -42,7 +42,6 @@
     "react": "^18.2.0"
   },
   "description": "PaySelection PayApp SDK позволяет интегрировать прием платежей в мобильное приложение для платформы React Native.",
-  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/PalinaHaidzina/Payselection-PayApp-SDK-ReactNative.git"
