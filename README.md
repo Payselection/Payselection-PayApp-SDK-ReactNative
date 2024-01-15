@@ -14,8 +14,10 @@ PaySelection PayApp SDK позволяет интегрировать прием
 ## Установка
 ```bash
 # using npm
-npm i  payselection-pay-app-sdk-reactnative
+npm install payselection-pay-app-sdk-reactnative
 
+# using yarn
+yarn add payselection-pay-app-sdk-reactnative
 ```
 
 
