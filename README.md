@@ -131,10 +131,6 @@ import getStatusApi from 'payselection-pay-app-sdk-reactnative/src/api/status';
  const result = await getStatusApi.getStatusByTransactionId(transactionId, getStatusByTransactionIdHeader);
 ```
 
-## Лицензия
-
-MIT
-
 ## Поддержка
 
 По возникающим вопросам техничечкого характера обращайтесь на [support@payselection.com](mailto:support@payselection.com)
