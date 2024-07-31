@@ -32,7 +32,7 @@ export const signatureGeneration = ( {
   }
   
   const signatureString = `${requestMethod}\n${url}\n${xSiteId}\n${xRequestId}\n${requestBody}`;
-  return HmacSHA256( signatureString, siteSecretKey ).toString( enc.Hex );
+  return HmacSHA256( signatureString.trim(), siteSecretKey ).toString( enc.Hex );
 }
 
 export const headers = () => ( {

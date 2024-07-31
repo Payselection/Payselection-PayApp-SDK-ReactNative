@@ -61,7 +61,7 @@ export const tokenBasedPayment: TokenBasedPayment = {
 ```
 
 ### Генерация подписи запроса (X-REQUEST-SIGNATURE)
-Перед тем как использовать `paymentApi` и `getStatusApi` необходимо сгенерировать уникальную подпись запроса. Для этого необходимо создать интерфейс типа `SignatureProps` и вызвать метод `signatureGeneration`
+Перед тем как использовать `getStatusApi` необходимо сгенерировать уникальную подпись запроса. Для этого необходимо создать интерфейс типа `SignatureProps` и вызвать метод `signatureGeneration`
 для генерации подписи запроса:
 
 ```jsx
@@ -88,9 +88,38 @@ import { PublicPayHeader } from 'payselection-pay-app-sdk-reactnative/src/types/
 const payHeader: PublicPayHeader = {
   X_SITE_ID: '99999',
   X_REQUEST_ID: 'Tkrdjvb87630Uegp', // X_REQUEST_ID должен быть уникальным
-  X_REQUEST_SIGNATURE: signature, // Сгенерированная выше подпись запроса
 }
 ```
+### Получение `Value` для `PaymentDetails` для методов оплаты Cryptogram и CryptogramRSA
+
+Для получения Value необходимо вызвать функцию `getCryptogramValue` 
+
+```jsx
+const data: cryptogramValueProps = {
+    TransactionDetails: {
+        Amount: "100", //важно, чтобы совпадало с параметром из запроса
+        Currency: "RUB" //важно, чтобы совпадало с параметром из запроса
+    },
+    PaymentDetails: {
+        CardholderName:"TEST CARD",
+        CardNumber:"4111111111111111",
+        CVC:"123",
+        ExpMonth:"12",
+        ExpYear:"24"
+    },
+    PaymentMethod: "CryptogramRSA", //важно указать PaymentMethod
+    MessageExpiration: Date.now() + 86400000, //timestamp в миллисекундах
+    
+}
+const key = '042bd71a17fd5a1627b3dced4f28513e5cf69add379aad0f6d583ed1caab9c744ad98e2f187dc3ef202dfc8356aaaadb505a36306577338657c5bce993fd687049';
+
+const valuу = getCryptogramValue(data, key);
+
+```
+
+### Геренация данных для метода оплаты `PaymentMethod: 'Cryptogram'` и `PaymentMethod: 'CryptogramRSA'`
+
+Для упрощения генерации данных для методов оплаты `PaymentMethod: 'Cryptogram'` и `PaymentMethod: 'CryptogramRSA'` можно воспльзоваться методом `createCryptogramPayment()`.
 
 ### Вызов метода оплаты `paymentApi.publicPay`
 
