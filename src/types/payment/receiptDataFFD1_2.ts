@@ -32,7 +32,7 @@ interface CompanyFFD1_2 {
   email?: string;
   sno: TaxSystem;
   inn: string;
-  paymentAddress: string;
+  payment_address: string;
 }
 
 interface ItemsFFD1_2 {

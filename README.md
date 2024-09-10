@@ -92,7 +92,7 @@ const payHeader: PublicPayHeader = {
 ```
 ### Получение `Value` для `PaymentDetails` для методов оплаты Cryptogram и CryptogramRSA
 
-Для получения Value необходимо вызвать функцию `getCryptogramValue` 
+Для получения Value необходимо вызвать функцию `getCryptogramValue`
 
 ```jsx
 const data: cryptogramValueProps = {
@@ -101,19 +101,19 @@ const data: cryptogramValueProps = {
         Currency: "RUB" //важно, чтобы совпадало с параметром из запроса
     },
     PaymentDetails: {
-        CardholderName:"TEST CARD",
-        CardNumber:"4111111111111111",
-        CVC:"123",
-        ExpMonth:"12",
-        ExpYear:"24"
+        CardholderName: "TEST CARD",
+        CardNumber: "4111111111111111",
+        CVC: "123",
+        ExpMonth: "12",
+        ExpYear: "24"
     },
     PaymentMethod: "CryptogramRSA", //важно указать PaymentMethod
     MessageExpiration: Date.now() + 86400000, //timestamp в миллисекундах
-    
+
 }
 const key = '042bd71a17fd5a1627b3dced4f28513e5cf69add379aad0f6d583ed1caab9c744ad98e2f187dc3ef202dfc8356aaaadb505a36306577338657c5bce993fd687049';
 
-const valuу = getCryptogramValue(data, key);
+const valuу = getCryptogramRSAValue(data, key);
 
 ```
 

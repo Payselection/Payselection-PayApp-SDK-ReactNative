@@ -17,6 +17,7 @@ export interface PublicPayCustomerInfo {
     ZIP?: string;
     Country?: string;
     IP: string;
+    UserId?: string;
 }
 
 export interface PublicPayExtraData {
