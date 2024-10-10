@@ -3,11 +3,9 @@ import forge from 'node-forge';
 import base64 from 'base-64';
 
 import { AES, enc, HmacSHA256, SHA512, lib, mode, pad } from 'crypto-js';
-import elliptic from 'elliptic';
+import { ec as EC } from 'elliptic-expo';
 import { getRandomBytes } from "expo-crypto";
 
-
-const EC = elliptic.ec;
 const ec = new EC('secp256k1');
 
 export interface CryptogramValueProps {
@@ -77,7 +75,12 @@ async function encrypt(pubKey: string, message: string): Promise<string> {
         const aesKey = enc.Hex.parse(sharedKeyHash.slice(0, 64));
         const macKey = enc.Hex.parse(sharedKeyHash.slice(64, 128));
         
-        const ivBytes = Buffer.from(await getRandomBytes(16));
+        let ivBytes;
+        try {
+            ivBytes = Buffer.from(await getRandomBytes(16));
+        } catch (error) {
+            throw error;
+        }
         const ivWordArray = enc.Hex.parse(ivBytes.toString('hex'));
         
         const cipher = AES.encrypt(enc.Utf8.parse(message), aesKey, {

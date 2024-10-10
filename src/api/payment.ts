@@ -6,7 +6,7 @@ import { parseResponse } from '../utils/common.ts';
 
 const paymentApi = {
   async publicPay(payload: PublicPayPayload, header: PublicPayHeader): Promise<PayResponse> {
-    const url = `https://gw.payselection.com/payments/requests/public`;
+    const url = `https://pgw.payselection.com/payments/requests/public`;
     
     const headers = {
       'Content-Type': 'application/json',
