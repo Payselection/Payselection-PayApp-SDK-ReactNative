@@ -30,7 +30,7 @@ const getStatusApi = {
   },
   
   async getStatusByOrderId( orderId: string, header: GetStatusByOrderIdHeader ): Promise<MultiStateTransactionInfo | TransactionStateDeclined | TransactionStateWaitFor3ds | TransactionStateRedirect> {
-    const url = `https://pgw.payselection.com/orders/${orderId}`;
+    const url = `https://gw.payselection.com/orders/${orderId}`;
     const headers = {
       'Content-Type': 'application/json',
       'X-SITE-ID': header.X_SITE_ID,
