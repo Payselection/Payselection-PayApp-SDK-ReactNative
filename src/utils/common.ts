@@ -1,6 +1,10 @@
-import { HmacSHA256, enc } from 'crypto-js';
-import { CryptogramPayment, QRCodePayment, TokenBasedPayment } from '../types/payment/paymentPayload.ts';
-import { DEFAULT_ERROR_MESSAGE } from './errors.ts'
+import {HmacSHA256, enc} from 'crypto-js';
+import {
+  CryptogramPayment,
+  QRCodePayment,
+  TokenBasedPayment,
+} from '../types/payment/paymentPayload';
+import {DEFAULT_ERROR_MESSAGE} from './errors';
 
 export interface SignatureProps {
   requestMethod: string;
@@ -11,35 +15,34 @@ export interface SignatureProps {
   requestBody?: TokenBasedPayment | CryptogramPayment | QRCodePayment | string;
 }
 
-const extractPathFromUrl = ( url: string ): string => {
-  const parts = url.split( '/' );
-  parts.splice( 0, 3 );
-  return '/' + parts.join( '/' );
+const extractPathFromUrl = (url: string): string => {
+  const parts = url.split('/');
+  parts.splice(0, 3);
+  return '/' + parts.join('/');
 };
 
-export const signatureGeneration = ( {
+export const signatureGeneration = ({
   requestMethod,
   url,
   xRequestId,
   xSiteId,
   requestBody,
   siteSecretKey,
-}: SignatureProps ) => {
-  
+}: SignatureProps) => {
   if (requestMethod === 'GET') {
-    url = extractPathFromUrl( url );
+    url = extractPathFromUrl(url);
     requestBody = '';
   }
-  
+
   const signatureString = `${requestMethod}\n${url}\n${xSiteId}\n${xRequestId}\n${requestBody}`;
-  return HmacSHA256( signatureString, siteSecretKey ).toString( enc.Hex );
-}
+  return HmacSHA256(signatureString, siteSecretKey).toString(enc.Hex);
+};
 
-export const headers = () => ( {
+export const headers = () => ({
   'content-type': 'application/json',
-} );
+});
 
-export const parseResponse = async( response: Response ) => {
+export const parseResponse = async (response: Response) => {
   switch (response.status) {
     case 200:
     case 201:
@@ -51,9 +54,10 @@ export const parseResponse = async( response: Response ) => {
     case 403:
     case 409:
       const errorBody = await response.json();
-      throw new Error(`HTTP Error: ${response.status} \n ${JSON.stringify(errorBody)}`);
+      throw new Error(
+        `HTTP Error: ${response.status} \n ${JSON.stringify(errorBody)}`,
+      );
     default:
       throw new Error((await response.json()).message || DEFAULT_ERROR_MESSAGE);
   }
 };
-

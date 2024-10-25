@@ -5,7 +5,7 @@ import {
   PaymentsType,
   TaxSystem,
   VatType,
-} from '../commonTypes.ts';
+} from '../commonTypes';
 
 export interface ReceiptFFD1_2 {
   client: ClientFFD1_2;

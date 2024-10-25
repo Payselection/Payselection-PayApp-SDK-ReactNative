@@ -1,9 +1,11 @@
 import {
   AgentInfoType,
   PaymentMethodType,
-  PaymentObjectFFD1_05, PaymentsType, TaxSystem,
+  PaymentObjectFFD1_05,
+  PaymentsType,
+  TaxSystem,
   VatType,
-} from '../commonTypes.ts';
+} from '../commonTypes';
 
 export interface ReceiptFFD1_05 {
   client: ClientFFD1_05;
@@ -17,7 +19,6 @@ export interface ReceiptFFD1_05 {
   additional_check_props?: string;
   cashier?: string;
   additional_user_props?: AdditionalUserProps;
-  
 }
 
 interface ClientFFD1_05 {
@@ -35,7 +36,7 @@ interface CompanyFFD1_05 {
 }
 
 interface AgentInfoFFD1_05 {
-  type?: AgentInfoType,
+  type?: AgentInfoType;
   paying_agent?: PayingAgentFFD1_05;
   receive_payments_operator?: ReceivePaymentsOperatorFFD1_05;
   money_transfer_operator?: MoneyTransferOperatorFFD1_05;

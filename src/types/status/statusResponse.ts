@@ -14,14 +14,14 @@ export interface MultiStateTransactionInfo extends TransactionResult {
     RemainingAmount?: string;
     RebillId?: string;
     QrCodeString?: string;
-  }
+  };
 }
 
 export interface TransactionStateDeclined extends TransactionResult {
   StateDetails: {
     Code: string;
     Description: string;
-  }
+  };
 }
 
 export interface TransactionStateWaitFor3ds extends TransactionResult {
@@ -29,7 +29,7 @@ export interface TransactionStateWaitFor3ds extends TransactionResult {
     AcsUrl: string;
     PaReq: string;
     MD: string;
-  }
+  };
 }
 
 export interface TransactionStateRedirect extends TransactionResult {
@@ -37,6 +37,5 @@ export interface TransactionStateRedirect extends TransactionResult {
     RedirectUrl?: string;
     RedirectMethod?: string;
     QrCodeString?: string;
-  }
+  };
 }
-
