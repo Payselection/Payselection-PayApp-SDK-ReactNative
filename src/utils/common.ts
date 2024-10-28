@@ -61,3 +61,9 @@ export const parseResponse = async (response: Response) => {
       throw new Error((await response.json()).message || DEFAULT_ERROR_MESSAGE);
   }
 };
+
+export function generateXRequestId(): string {
+  const timestamp = Date.now().toString();
+  const randomString = Math.random().toString(36).substring(2, 15);
+  return `${randomString}-${timestamp}`;
+}
