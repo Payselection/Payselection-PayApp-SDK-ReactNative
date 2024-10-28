@@ -28,111 +28,201 @@ yarn add payselection-pay-app-sdk-reactnative
 ## Использование paymentApi
 
 ### Создание тела запроса для метода оплаты
-В зависимости от типа оплаты создайте экземпляр структуры `TokenBasedPayment`, `QRCodePayment` или `CryptogramPayment` с информацией о транзакции и данными карты, передав туда customerInfo, если требуется. 
+В зависимости от типа оплаты создайте экземпляр структуры `TokenBasedPayment`, `QRCodePayment`, `ExternalFormPayment`, `SberPayPayment`, `CryptogramPayment` или `CryptogramRSAPayment` с информацией о транзакции и данными карты, передав туда customerInfo, если требуется. 
 
-Внимание! Необходимо валидировать передаваемые данные, иначе сервер вернет ошибку. Подробнее о форматах можно прочесть в документации [Payselection API](https://api.payselection.com/).
+Внимание! Необходимо валидировать передаваемые данные, иначе сервер вернет ошибку. Подробнее о форматах можно прочесть в документации [Payselection API](https://api.payselection.com/). Также обратите внимание на тип чека (FFD1.05, FFD1.2).
 
-```jsx
-import { TokenBasedPayment, QRCodePayment, CryptogramPayment } from 'payselection-pay-app-sdk-reactnative/src/types/payment/paymentPayload.ts';
+```tsx
+import { CryptogramPayment } from 'payselection-pay-app-sdk-reactnative/src/types/payment/paymentPayload';
 
-export const tokenBasedPayment: TokenBasedPayment = {
-  OrderId: "", // Уникальный номер заказа
-  Amount: "10",
-  Currency: "RUB",
-  Description: "test payment",
-  RebillFlag: false,
-  CustomerInfo: {
-    Email: "user@example.com",
-    Phone: "+19991231212",
-    Language: "en",
-    Address: "string",
-    Town: "string",
-    ZIP: "string",
-    Country: "USA",
-    IP: "10.0.2.56"
-  },
-  PaymentMethod: "Token",
-  PaymentDetails: {
-    Type: "Yandex",
-    PayToken: "eyJzaWduZWRNZXNzYWdlIjoie1wiZW5jcnlwdGVkTWVzc2FnZVwiOlwiMXljbzNsbkl4cTRFRUZ0eEF3TnNOaGxKbTJSdXJ0dG9tOGloYkNuMjR6WkVUOW5oeGkyV0M0WmZzdDhmMklSb3AxbXN1Y2o4TTZYTTFKNWlPdG9VRExCTGtlWHlxQzJIVWFpOGVrR29BYjFQY1RUSWZFcHM4OEZRK1BTUis2RjduTEFpU25IUUJ0d3QvSGE0SE5ORVlBdkdQQXEvSHFNMldyb1FXK2k3ZkVUbGxkU25xazE4WkFyeDc4dW9FQWVOYW9OYThGbXhnU2tNUCt6Q2Q1ZWowdWpaNUd5RjhNVWtNVjFSL3liRzJmZHR1bktMTzZRbkVZc0pkblhEN3pGTEIrZkJQUjR5UktYZTRqV3FkbnpqUUY1WkZnSHZBQTZINnhFTFlzVmZsc1pJVndFbGtNRzFBTWI0MWJDMVY5enpcIixcImVwaGVtZXJhbFB1YmxpY0tleVwiOlwiQkVQQkxlczhLWWp2WCtYem13Z3h3QithL2JYYSs0ZUdvSWF3eFRpeTlQcHRpOXcrTUtPdDRxSHFaNmNGcmFhcFY4Q3dwT29KWEVrTE1ZQVhRUjRsMDFFPVwifSIsIml2IjoiZWJ2SVg5TzBwVnRTZ21QNGFqcnd2UT09IiwidGFnIjoiNVE2cWNGRHg3L0NEaXZscHRVbDh2Umo4RFFWZUxHRGZ5UlV3UTdJa0tsMD0ifQ=="
-  }
+export const cryptogramPaymentDataFFD1_05: CryptogramPayment = {
+    OrderId: "SAM_SDK_3",
+    Amount: "11.00",
+    Currency: "RUB",
+    Description: "test payment",
+    RebillFlag: false,
+    CustomerInfo: {
+        Email: "user@example.com",
+        Phone: "+19991231212",
+        Language: "en",
+        Address: "string",
+        Town: "string",
+        ZIP: "1234567",
+        Country: "USA",
+        IP: "10.0.2.56",
+        UserId: "string"
+    },
+    ExtraData: {
+        ReturnUrl: "https://api.payselection.com/",
+        WebhookUrl: "https://webhook.site/94a06b69",
+        ScreenHeight: "768",
+        ScreenWidth: "1024",
+        ChallengeWindowSize: "5",
+        TimeZoneOffset: "-180",
+        ColorDepth: "8",
+        Region: "ru",
+        UserAgent: "Mozilla/5.0+(Macintosh;+Intel+Mac+OS+X+10_15_5)+AppleWebKit/527.36+(KHTML,+Gecko)+Chrome83.0.4103.116+Safari/537.36",
+        acceptHeader: "text/html",
+        JavaEnabled: true,
+        javaScriptEnabled: true
+    },
+    ReceiptData: {
+        timestamp: "string",
+        external_id: "string",
+        receipt: {
+            client: {
+                name: "string",
+                inn: "string",
+                email: "string",
+                phone: "string"
+            },
+            company: {
+                email: "string",
+                sno: TaxSystem.osn,
+                inn: "string",
+                payment_address: "string",
+            },
+            agent_info: {
+                type: AgentInfoType.bank_paying_agent,
+                paying_agent: {
+                    operation: "string",
+                    phones: ["+375298763261"],
+                },
+                receive_payments_operator: {
+                    phones: ["+375298763262"]
+                },
+                money_transfer_operator: {
+                    phones: ["+375298763263"],
+                    name: "string",
+                    address: "string",
+                    inn: "string"
+                }
+            },
+            supplier_info: {
+                phones: ["375298763264"]
+            },
+            items: [
+                {
+                    name: "string",
+                    price: 42949673,
+                    quantity: 99999.999,
+                    sum: 42949672.95,
+                    measurement_unit: "string",
+                    payment_method: PaymentMethodType.full_payment,
+                    payment_object: PaymentObjectFFD1_05.commodity,
+                    nomenclature_code: "string",
+                    vat: {
+                        type: VatType.vat10,
+                        sum: 99999999.99,
+                    },
+                    agent_info: {
+                        type: AgentInfoType.bank_paying_agent,
+                        paying_agent: {
+                            operation: "string",
+                            phones: ["+375441238751"]
+                        },
+                        receive_payments_operator: {
+                            phones: ["+375441238752"]
+                        },
+                        money_transfer_operator: {
+                            phones: ["+375441238734"],
+                            name: "string",
+                            address: "string",
+                            inn: "string",
+                        },
+                    },
+                    supplier_info: {
+                        phones: ["+375441238731"],
+                        name: "string",
+                        inn: "string",
+                    },
+                    user_data: "string",
+                    excise: 0,
+                    country_code: "str",
+                    declaration_number: "string",
+                }
+            ],
+            payments: [{
+                type: PaymentsType.cash,
+                sum: 99999999.99,
+            }],
+            vats: [{
+                type: VatType.vat0,
+                sum: 99999999.99,
+            }],
+            total: 99999999.99,
+            additional_check_props: "string",
+            cashier: "string",
+            additional_user_props: {
+                name: "string",
+                value: "string"
+            }
+        }
+    },
+    PaymentDetails: {
+        Value: "",
+    },
+    PaymentMethod: "Cryptogram",
 }
 
 ```
 
-### Генерация подписи запроса (X-REQUEST-SIGNATURE)
-Перед тем как использовать `getStatusApi` необходимо сгенерировать уникальную подпись запроса. Для этого необходимо создать интерфейс типа `SignatureProps` и вызвать метод `signatureGeneration`
-для генерации подписи запроса:
+### Получение `Value` для `PaymentDetails` для методов оплаты Cryptogram и CryptogramRSA
 
-```jsx
-import { SignatureProps, signatureGeneration } from 'payselection-pay-app-sdk-reactnative/src/utils/common.ts';
+Для получения Value необходимо вызвать функцию `getCryptogramValue`
 
-const signaturePayment: SignatureProps = {
-  requestMethod: 'POST', // Request method (Метод запроса)
-  url: 'https://example.com', // URL (Адрес запроса)
-  xSiteId: '99999', // X-SITE-ID (Находится в личном кабинете мерчанта, в разделе “Сайты”, параметр ID сайта)
-  xRequestId: 'Tkrdjvb87630Uegp', // X-REQUEST-ID (Генерируется на стороне мерчанта)
-  siteSecretKey: 'jdPnu3LKGnBqShN3', // Cекретный ключ или публичный ключ
-  requestBody: tokenBasedPayment, // Request body (Тело запроса)
-}
+```tsx
 
-const signature = signatureGeneration(signaturePayment);
+//Для методы оплаты CryptogramRSA
+    cryptogram = getCryptogramRSAValue(cryptogramValue, publicRSAKey);
+
+//Для метода оплаты Cryptogram
+    try {
+        cryptogram = await getCryptogramECDHValue(cryptogramValue, publicKey);
+        break;
+    } catch (error) {
+        console.error(error);
+    }
 ```
 
 ### Создание заголовка для вызова методы оплаты
 Создания заголовка для метода оплаты `paymentApi.publicPay`:
 
 ```jsx
-import { PublicPayHeader } from 'payselection-pay-app-sdk-reactnative/src/types/payment/paymentPayload.ts';
+import { PublicPayHeader } from 'payselection-pay-app-sdk-reactnative/src/types/payment/paymentPayload';
 
 const payHeader: PublicPayHeader = {
   X_SITE_ID: '99999',
   X_REQUEST_ID: 'Tkrdjvb87630Uegp', // X_REQUEST_ID должен быть уникальным
 }
 ```
-### Получение `Value` для `PaymentDetails` для методов оплаты Cryptogram и CryptogramRSA
-
-Для получения Value необходимо вызвать функцию `getCryptogramValue`
-
-```jsx
-const data: cryptogramValueProps = {
-    TransactionDetails: {
-        Amount: "100", //важно, чтобы совпадало с параметром из запроса
-        Currency: "RUB" //важно, чтобы совпадало с параметром из запроса
-    },
-    PaymentDetails: {
-        CardholderName: "TEST CARD",
-        CardNumber: "4111111111111111",
-        CVC: "123",
-        ExpMonth: "12",
-        ExpYear: "24"
-    },
-    PaymentMethod: "CryptogramRSA", //важно указать PaymentMethod
-    MessageExpiration: Date.now() + 86400000, //timestamp в миллисекундах
-
-}
-const key = '042bd71a17fd5a1627b3dced4f28513e5cf69add379aad0f6d583ed1caab9c744ad98e2f187dc3ef202dfc8356aaaadb505a36306577338657c5bce993fd687049';
-
-const valuу = getCryptogramRSAValue(data, key);
-
-```
-
-### Геренация данных для метода оплаты `PaymentMethod: 'Cryptogram'` и `PaymentMethod: 'CryptogramRSA'`
-
-Для упрощения генерации данных для методов оплаты `PaymentMethod: 'Cryptogram'` и `PaymentMethod: 'CryptogramRSA'` можно воспльзоваться методом `createCryptogramPayment()`.
 
 ### Вызов метода оплаты `paymentApi.publicPay`
 
 ```jsx
-import paymentApi from 'payselection-pay-app-sdk-reactnative/src/api/payment.ts';
+import paymentApi from 'payselection-pay-app-sdk-reactnative/src/api/payment';
 
-const result = await paymentApi.publicPay(tokenBasedPayment, payHeader);
+const result = await paymentApi.publicPay(cryptogramPaymentDataFFD1_05, payHeader);
 ```
+
 
 ## Использование getStatusApi
 
 ### Генерация подписи запроса (X-REQUEST-SIGNATURE)
-Используется тот же метод, что и для `paymentApi`. 
+Перед тем как использовать `getStatusApi` необходимо сгенерировать уникальную подпись запроса. Для этого необходимо создать интерфейс типа `SignatureProps` и вызвать метод `signatureGeneration`
+для генерации подписи запроса:
+
+```jsx
+const signaturePayment: SignatureProps = {
+  requestMethod: 'POST', // Request method (Метод запроса)
+  url: 'https://example.com', // URL (Адрес запроса)
+  xSiteId: '99999', // X-SITE-ID (Находится в личном кабинете мерчанта, в разделе “Сайты”, параметр ID сайта)
+  xRequestId: 'Tkrdjvb87630Uegp', // X-REQUEST-ID (Генерируется на стороне мерчанта)
+  siteSecretKey: 'jdPnu3LKGnBqShN3', // Cекретный ключ или публичный ключ
+}
+
+const signature = signatureGeneration(signaturePayment);
+```
 
 ### Создание заголовка для вызова методы оплаты
 
@@ -149,17 +239,19 @@ const getStatusByOrderIdHeader: GetStatusByTransactionIdHeader = {
 }
 ```
 
-### Вызов методов получения информации о транзацкии по orderId или TransactionId
+### Вызов методов получения информации о транзакции по orderId или TransactionId
 
 ```jsx
 import getStatusApi from 'payselection-pay-app-sdk-reactnative/src/api/status';
 
 // Для получения информации по `orderId`
+// orderId из ответа publicPay
  const result = await getStatusApi.getStatusByOrderId(orderId, getStatusByOrderIdHeader);
 // Для получения информации по `TransactionId`
+// TransactionId из ответа publicPay
  const result = await getStatusApi.getStatusByTransactionId(transactionId, getStatusByTransactionIdHeader);
 ```
 
 ## Поддержка
 
-По возникающим вопросам техничечкого характера обращайтесь на [support@payselection.com](mailto:support@payselection.com)
+По возникающим вопросам технического характера обращайтесь на [support@payselection.com](mailto:support@payselection.com)
