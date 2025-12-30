@@ -55,6 +55,8 @@ export enum VatType {
   'vat110' = 'vat110',
   'vat20' = 'vat20',
   'vat120' = 'vat120',
+  'vat22' = 'vat22',
+  'vat122' = 'vat122',
 }
 
 export enum PaymentsType {
